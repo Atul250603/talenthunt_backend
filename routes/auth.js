@@ -5,6 +5,7 @@ const mailHelper=require('../mailController');
 const bcryptjs=require('bcryptjs');
 const jwt=require('jsonwebtoken');
 const secret=process.env.SECRET;
+const fetchuser=require('../middleware');
 router.post('/emailverify',async(req,res)=>{
     try{
         let {email,otp}=req.body;
