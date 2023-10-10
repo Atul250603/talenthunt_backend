@@ -62,9 +62,13 @@ router.post('/login',async(req,res)=>{
             if(!bcryptjs.compareSync(password, data.password)){
                 res.status(200).json({error:"Incorrect Password"});
             }
-            let token = jwt.sign({ user:data }, secret);
+            let token = jwt.sign({ user:{
+                email:data.email,
+                password:data.password,
+                _id:data._id
+            } }, secret);
             if(token){
-                res.status(200).json({success:"Login Successful",token:token});
+                res.status(200).json({success:"Login Successful",token:token,user:{email:data.email,type:data.type,profileCompleted:data.profileCompleted}});
             }
         }
         else{
