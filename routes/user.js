@@ -12,7 +12,7 @@ router.post('/editprofile',fetchuser,async(req,res)=>{
         let data=req.body;
         let user=req.user;
         let uid=user._id;
-        let doc=await UserInfo.findOneAndUpdate({userId:uid},data);
+        let doc=await UserInfo.findOne({userId:uid});
         if(!doc){
           doc=new UserInfo({
             ...data,
@@ -23,16 +23,21 @@ router.post('/editprofile',fetchuser,async(req,res)=>{
             throw "Error In Updating The User Profile";
           }
         }
-        const userdoc=await User.findOne({_id:uid});
+        else{
+            doc=await UserInfo.updateOne({userId:uid},{$set:{fname:data.fname,lname:data.lname,email:data.email,currorg:data.currorg,education:data.education,workexp:data.workexp,skills:data.skills,socials:data.socials,profileImg:data.profileImg,resume:data.resume}});
+        }
+        let userdoc=await User.findOne({_id:uid});
         if(!userdoc){
             throw "Error In Finding The User";
         }
         if(!userdoc.profileCompleted){
-            const newuserdoc=await User.findOneAndUpdate({_id:uid},{profileCompleted:true});
+            const newuserdoc=await User.updateOne({_id:uid},{$set:{profileCompleted:true}});
             if(!newuserdoc){
                 throw "Error In Updating The User Status";
             }
-            userdoc=newuserdoc;
+            userdoc={
+                ...userdoc,profileCompleted:true
+            }
         }
         res.status(200).json({success:"Successfully Updated The Profile Information",user:{email:userdoc.email,type:userdoc.type,profileCompleted:userdoc.profileCompleted},user_info:doc})
     }
