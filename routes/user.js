@@ -24,7 +24,12 @@ router.post('/editprofile',fetchuser,async(req,res)=>{
           }
         }
         else{
-            doc=await UserInfo.updateOne({userId:uid},{$set:{fname:data.fname,lname:data.lname,email:data.email,currorg:data.currorg,education:data.education,workexp:data.workexp,skills:data.skills,socials:data.socials,profileImg:data.profileImg,resume:data.resume}});
+            if(user.type==='Candidate'){
+                doc=await UserInfo.updateOne({userId:uid},{$set:{fname:data.fname,lname:data.lname,email:data.email,currorg:data.currorg,education:data.education,workexp:data.workexp,skills:data.skills,socials:data.socials,profileImg:data.profileImg,resume:data.resume}});
+            }
+            else if(user.type==='Organizer'){
+                doc=await UserInfo.updateOne({userId:uid},{$set:{fname:data.fname,lname:data.lname,email:data.email,currorg:data.currorg,socials:data.socials,profileImg:data.profileImg}});
+            }
         }
         let userdoc=await User.findOne({_id:uid});
         if(!userdoc){
@@ -38,6 +43,10 @@ router.post('/editprofile',fetchuser,async(req,res)=>{
             userdoc={
                 ...userdoc,profileCompleted:true
             }
+        }
+        doc=await UserInfo.findOne({userId:uid});
+        if(!doc){
+            throw "Error In Updating The User Profile";
         }
         res.status(200).json({success:"Successfully Updated The Profile Information",user:{email:userdoc.email,type:userdoc.type,profileCompleted:userdoc.profileCompleted},user_info:doc})
     }

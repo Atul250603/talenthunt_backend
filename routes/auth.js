@@ -65,7 +65,8 @@ router.post('/login',async(req,res)=>{
             let token = jwt.sign({ user:{
                 email:data.email,
                 password:data.password,
-                _id:data._id
+                _id:data._id,
+                type:data.type
             } }, secret);
             if(token){
                 res.status(200).json({success:"Login Successful",token:token,user:{email:data.email,type:data.type,profileCompleted:data.profileCompleted}});

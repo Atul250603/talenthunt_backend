@@ -11,6 +11,7 @@ connectToMongo();
 app.use('/auth',require('./routes/auth.js'));
 app.use('/user',require('./routes/user.js'));
 app.use('/project',require('./routes/project.js'));
+app.use('/hackathon',require('./routes/hackathon.js'));
 app.use('/message',require('./routes/message.js'));
 const server=app.listen(port,()=>{
     console.log(`Server is running on port ${port}`);
