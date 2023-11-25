@@ -205,7 +205,7 @@ router.post('/myhackathon/:id',fetchuser,async(req,res)=>{
         }
         const hackinfo=await HackInfo.findOne({hackathonId:req.params.id}).populate('hackathonId');
         if(!hackinfo){
-            throw "Error In Finding The Hackathon";
+            throw "No One Has Applied To The Hackathon Yet";
         }
         if(String(hackinfo.hackathonId.userId)!==String(uid)){
             throw "You Are Not The Creator Of This Hackathon";

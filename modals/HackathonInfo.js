@@ -5,7 +5,6 @@ let hackathoninfoSchema=new mongoose.Schema({
         ref:'hackathon'
     },
    applied:Array,
-   submissions:Array,
-   prizes:Array
+   submissions:Array
 })
 module.exports=mongoose.model('hackathoninfo',hackathoninfoSchema);
