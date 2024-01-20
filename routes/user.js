@@ -30,6 +30,9 @@ router.post('/editprofile',fetchuser,async(req,res)=>{
             else if(user.type==='Organizer'){
                 doc=await UserInfo.updateOne({userId:uid},{$set:{fname:data.fname,lname:data.lname,email:data.email,currorg:data.currorg,socials:data.socials,profileImg:data.profileImg}});
             }
+            else if(user.type==='Recruiter'){
+                doc=await UserInfo.updateOne({userId:uid},{$set:{fname:data.fname,lname:data.lname,email:data.email,currorg:data.currorg,socials:data.socials,profileImg:data.profileImg}});
+            }
         }
         let userdoc=await User.findOne({_id:uid});
         if(!userdoc){
