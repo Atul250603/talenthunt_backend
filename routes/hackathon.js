@@ -86,7 +86,7 @@ router.post('/applyhackathon/:id',fetchuser,async(req,res)=>{
         if(!userdoc){
             throw "Error In Finding The User";
         }
-        const hackathoninfo=await HackInfo.findOne({projectId:req.params.id});
+        const hackathoninfo=await HackInfo.findOne({hackathonId:req.params.id});
         if(!hackathoninfo){
             const hackathon=await Hackathon.findOne({_id:req.params.id});
             if(!hackathon){
@@ -104,7 +104,7 @@ router.post('/applyhackathon/:id',fetchuser,async(req,res)=>{
         }
         else{
             const applied=[...hackathoninfo.applied,uid];
-            const updatehackinfo=await HackInfo.updateOne({projectId:req.params.id},{$set:{applied:applied}});
+            const updatehackinfo=await HackInfo.updateOne({hackathonId:req.params.id},{$set:{applied:applied}});
             if(!updatehackinfo){
                 throw "Error In Applying For The Hackathon";
             }

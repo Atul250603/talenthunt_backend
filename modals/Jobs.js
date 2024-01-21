@@ -8,6 +8,7 @@ let jobSchema=new mongoose.Schema({
     description:String,
     organizer:String,
     salary:String,
-    location:String
+    location:String,
+    appdeadline:Date
 })
 module.exports=mongoose.model('job',jobSchema);
