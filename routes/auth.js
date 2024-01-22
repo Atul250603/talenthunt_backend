@@ -10,28 +10,28 @@ router.post('/emailverify',async(req,res)=>{
     try{
         let {email,otp}=req.body;
         let user=await User.findOne({email:email});
-        if(!user || user==='undefined' || user===null){
+        if(user){
+            throw 'Email Already Registered';
+        }
             const info=await mailHelper(email,otp);
-            if(info && info.messageId){
-                res.status(200).json({success:"Email Sent Successfully"});
+            if(!info || !info.messageId){
+                throw 'Failed To Send The Mail';
+                
             }
-            else{
-                res.status(200).json({Error:"Failed To Send The Mail"});
-            }
-        }
-        else{
-            res.status(200).json({error:"Email Already Registered"});
-        }
+            res.status(200).json({success:"Email Sent Successfully"});
     }
     catch(error){
-        res.status(500).json({error:"Some Error Occured"});
+        res.status(500).json({error:error});
     }
 })
 router.post('/signup',async(req,res)=>{
     try{
         let {email,password,type}=req.body;
         let user=await User.findOne({email});
-        if(!user || user==='undefined' || user===null){
+        if(user){
+            throw 'Email Already Registered';
+        }
+        
             let salt=bcryptjs.genSaltSync(10);
             let hash=bcryptjs.hashSync(password,salt);
             let newUser=new User({
@@ -41,26 +41,24 @@ router.post('/signup',async(req,res)=>{
             });
             let savedUser=await newUser.save();
             if(!savedUser || savedUser==='undefined' || savedUser===null){
-                res.status(500).json({error:"Error In Registering The User"});
+                throw 'Error In Registering The User';
             }
-            res.status(200).json({success:'User Registered Successfully',user:savedUser});
-        }
-        else{
-            res.status(200).json({error:"Email Already Registered"});
-        }
+            res.status(200).json({success:'User Registered Successfully',user:savedUser})
     }
     catch(error){
-        res.status(500).json({error:"Some Error Occured"});
+        res.status(500).json({error:error});
     }
 })
 router.post('/login',async(req,res)=>{
     try{
         let {email,password}=req.body;
         let user=await User.find({email});
-        if(user && user!==undefined && user.length>0){
+        if(!user){
+            throw 'No Such User Exists';
+        }
             let data=user[0];
             if(!bcryptjs.compareSync(password, data.password)){
-                res.status(200).json({error:"Incorrect Password"});
+               throw 'Incorrect Password';
             }
             let token = jwt.sign({ user:{
                 email:data.email,
@@ -68,16 +66,13 @@ router.post('/login',async(req,res)=>{
                 _id:data._id,
                 type:data.type
             } }, secret);
-            if(token){
-                res.status(200).json({success:"Login Successful",token:token,user:{email:data.email,type:data.type,profileCompleted:data.profileCompleted}});
+            if(!token){
+                throw 'Error In Loggig In';
             }
-        }
-        else{
-            res.status(200).json({error:"No Such User Exists"});
-        }
+            res.status(200).json({success:"Login Successful",token:token,user:{email:data.email,type:data.type,profileCompleted:data.profileCompleted}});
     }
     catch(error){
-        res.status(500).json({error:"Some Error Occured"});
+        res.status(500).json({error:error});
     }
 })
 module.exports=router;

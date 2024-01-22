@@ -317,16 +317,16 @@ router.post('/getprofile/:id/p/:projid',fetchuser,async(req,res)=>{
         }
         let project=await Project.findOne({_id:req.params.projid,userId:uid});
         if(!project){
-            project=await Project.findOne({_id:req.params.projid});
-            if(project){
-                let projectinfo=await ProjectInfo.findOne({projectId:project._id,accepted:{$in:[uid]}});
-                if(!projectinfo){
-                    throw "Error In Finding The Project";
-                }
-            }
-            else{
+            // project=await Project.findOne({_id:req.params.projid});
+            // if(project){
+            //     let projectinfo=await ProjectInfo.findOne({projectId:project._id,accepted:{$in:[uid]}});
+            //     if(!projectinfo){
+            //         throw "Error In Finding The Project";
+            //     }
+            // }
+            // else{
                 throw "Error In Finding The Project";
-            }
+            // }
         }
         const info=await UserInfo.findOne({userId:req.params.id});
         res.status(200).json({success:"Displaying The Profile Information",user_info:info});

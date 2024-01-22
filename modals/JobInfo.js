@@ -5,6 +5,7 @@ let jobinfoSchema=new mongoose.Schema({
         ref:'job'
     },
    applied:Array,
+   nonshortlisted:Array,
    shortlisted:Array,
    assignments:Array,
    interviews:Array

@@ -4,7 +4,7 @@ const app=express();
 const connectToMongo=require('./db');
 const cors=require('cors');
 const socket=require('socket.io');
-const port=process.env.PORT;
+const port=process.env.PORT||5000;
 app.use(express.json());
 app.use(cors());
 connectToMongo();
