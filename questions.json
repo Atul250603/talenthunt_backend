@@ -1,0 +1,179 @@
+{
+  "mcqs": [
+    {
+      "question": "Which word does not belong to the group?",
+      "options": ["Circle", "Square", "Triangle", "Oval"],
+      "correct_answer": "Oval"
+    },
+    {
+      "question": "What is the missing number in the sequence: 3, 6, 12, __, 48?",
+      "options": ["18", "24", "36", "30"],
+      "correct_answer": "24"
+    },
+    {
+      "question": "If 'APPLE' is coded as '901601512,' how is 'ORANGE' coded?",
+      "options": ["151518512", "151518151505", "151518515", "1515051815"],
+      "correct_answer": "1515051815"
+    },
+    {
+      "question": "Complete the pattern: AB, CD, EF, ___?",
+      "options": ["GH", "IJ", "KL", "MN"],
+      "correct_answer": "GH"
+    },
+    {
+      "question": "If all swans are white and Mary has a white swan, what can you conclude?",
+      "options": ["Mary is a birdwatcher.", "Mary has a white object.", "Mary has a white bird.", "Mary may or may not have a white swan."],
+      "correct_answer": "Mary has a white bird."
+    },
+    {
+      "question": "What is the main conclusion of the argument: 'All dogs love bones. Fido is a dog. Therefore, Fido loves bones.'",
+      "options": ["Fido loves bones.", "Dogs love bones.", "All dogs are Fido.", "Bones are loved by all dogs."],
+      "correct_answer": "Fido loves bones."
+    },
+    {
+      "question": "If all books are knowledge, and some knowledge is power, can we conclude that all books are power?",
+      "options": ["Yes", "No", "Maybe", "Not enough information"],
+      "correct_answer": "Yes"
+    },
+    {
+      "question": "If some students are athletes and all athletes are disciplined, can we conclude that some students are disciplined?",
+      "options": ["Yes", "No", "Maybe", "Not enough information"],
+      "correct_answer": "Yes"
+    },
+    {
+      "question": "Identify the assumption in the following argument: 'If she studies hard, she will pass the exam. She passed the exam, so she must have studied hard.'",
+      "options": ["Studying hard guarantees passing.", "Passing the exam requires studying hard.", "She studied hard.", "She didn't study hard."],
+      "correct_answer": "Studying hard guarantees passing."
+    },
+    {
+      "question": "Identify the next number in the sequence: 2, 6, 12, 20, ___?",
+      "options": ["20", "24", "32", "64"],
+      "correct_answer": "32"
+    },
+    {
+      "question": "Which word is the odd one out?",
+      "options": ["Synonym", "Antonym", "Homonym", "Acronym"],
+      "correct_answer": "Synonym"
+    },
+    {
+      "question": "What is the opposite of 'brave'?",
+      "options": ["Fearful", "Strong", "Courageous", "Bold"],
+      "correct_answer": "Fearful"
+    },
+    {
+      "question": "If 'run' is to 'jog,' what is 'walk' to?",
+      "options": ["Skip", "Stroll", "Sprint", "Hike"],
+      "correct_answer": "Stroll"
+    },
+    {
+      "question": "What does the word 'ephemeral' mean?",
+      "options": ["Lasting a very short time", "Permanent", "Eternal", "Endless"],
+      "correct_answer": "Lasting a very short time"
+    },
+    {
+      "question": "Choose the word that is most similar to 'alleviate.'",
+      "options": ["Aggravate", "Intensify", "Relieve", "Worsen"],
+      "correct_answer": "Relieve"
+    },
+    {
+      "question": "Identify the next piece in the pattern: 2, 6, 12, __, 30.",
+      "options": ["18", "20", "24", "28"],
+      "correct_answer": "24"
+    },
+    {
+      "question": "What is the next shape in the sequence: Square, Triangle, Circle, ___?",
+      "options": ["Rectangle", "Oval", "Pentagon", "Hexagon"],
+      "correct_answer": "Oval"
+    },
+    {
+      "question": "Complete the analogy: Gloves are to hands as ___ is to feet.",
+      "options": ["Hat", "Socks", "Scarf", "Shoes"],
+      "correct_answer": "Socks"
+    },
+    {
+      "question": "If AB is to CD, then EF is to ___?",
+      "options": ["GH", "IJ", "KL", "MN"],
+      "correct_answer": "GH"
+    },
+    {
+      "question": "What comes next in the series: 3, 6, 9, 12, ___?",
+      "options": ["14", "15", "16", "18"],
+      "correct_answer": "15"
+    },
+    {
+      "question": "Shoe is to foot as glove is to ___?",
+      "options": ["Hand", "Finger", "Wrist", "Arm"],
+      "correct_answer": "Hand"
+    },
+    {
+      "question": "Fish is to water as bird is to ___?",
+      "options": ["Sky", "Air", "Nest", "Tree"],
+      "correct_answer": "Air"
+    },
+    {
+      "question": "Circle is to sphere as square is to ___?",
+      "options": ["Cube", "Pyramid", "Cylinder", "Cone"],
+      "correct_answer": "Cube"
+    },
+    {
+      "question": "Day is to night as sunrise is to ___?",
+      "options": ["Sunset", "Morning", "Afternoon", "Evening"],
+      "correct_answer": "Sunset"
+    },
+    {
+      "question": "Pen is to write as knife is to ___?",
+      "options": ["Cut", "Chop", "Slice", "Dice"],
+      "correct_answer": "Cut"
+    },
+    {
+      "question": "Shoe is to foot as glove is to ___?",
+      "options": ["Hand", "Finger", "Wrist", "Arm"],
+      "correct_answer": "Hand"
+    },
+    {
+      "question": "Fish is to water as bird is to ___?",
+      "options": ["Sky", "Air", "Nest", "Tree"],
+      "correct_answer": "Air"
+    },
+    {
+      "question": "Circle is to sphere as square is to ___?",
+      "options": ["Cube", "Pyramid", "Cylinder", "Cone"],
+      "correct_answer": "Cube"
+    },
+    {
+      "question": "Day is to night as sunrise is to ___?",
+      "options": ["Sunset", "Morning", "Afternoon", "Evening"],
+      "correct_answer": "Sunset"
+    },
+    {
+      "question": "Pen is to write as knife is to ___?",
+      "options": ["Cut", "Chop", "Slice", "Dice"],
+      "correct_answer": "Cut"
+    },
+    {
+      "question": "Identify the next shape in the sequence: □, ◆, ■, ▲, ___?",
+      "options": ["◼", "◇", "●", "★"],
+      "correct_answer": "◇"
+    },
+    {
+      "question": "What comes next in the pattern: ▲, ▼, ◄, ►, ___?",
+      "options": ["■", "●", "↔", "↗"],
+      "correct_answer": "↔"
+    },
+    {
+      "question": "Which figure does not belong to the group?",
+      "options": ["◯", "△", "□", "♦"],
+      "correct_answer": "♦"
+    },
+    {
+      "question": "Complete the analogy: ▲ is to ▼ as ► is to ___?",
+      "options": ["◄", "▲", "□", "■"],
+      "correct_answer": "◄"
+    },
+    {
+      "question": "If the pattern is □, ◆, □, ◆, □, what comes next?",
+      "options": ["◆", "□", "◆◆", "□□"],
+      "correct_answer": "◆"
+    }
+  ]
+}

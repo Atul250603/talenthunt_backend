@@ -5,6 +5,8 @@ const UserInfo=require('../modals/UserInfo.js');
 const JobInfo=require('../modals/JobInfo.js');
 const Job=require('../modals/Jobs.js');
 const fetchuser=require('../middleware');
+const Questions=require('../modals/Question.js');
+const Assignment=require('../modals/Assignment.js');
 router.post('/createjob',fetchuser,async(req,res)=>{
     try{
         let data=req.body;
@@ -273,6 +275,51 @@ router.post('/getprofile/:id/:jobId',fetchuser,async(req,res)=>{
     }
     catch(error){
         res.status(501).json({error:error})
+    }
+})
+router.post('/questions',fetchuser,async(req,res)=>{
+    try{
+        let user=req.user;
+        let uid=user._id;
+        const doc=await User.findOne({_id:uid});
+        if(!doc){
+           throw "No Information About User Exists";
+        }
+        const doc1=await Job.findOne({userId:uid});
+        if(!doc1){
+            throw "Not Authorized To View Questionnaire";
+        }
+        const questions=await Questions.find({});
+        if(!questions || !questions.length){
+            throw "Error In Listing The Questions";
+        }
+        res.status(200).json({success:"Successfully Listed All The Questions",questions});
+    }
+    catch(error){
+        res.status(501).json({error:error});
+    }
+})
+router.post('/createassignment/:id',fetchuser,async(req,res)=>{
+    try{
+        let user=req.user;
+        let uid=user._id;
+        const doc=await User.findOne({_id:uid});
+        if(!doc){
+           throw "No Information About User Exists";
+        }
+        const doc1=await Job.findOne({_id:req.params.id,userId:uid});
+        if(!doc1){
+            throw "No Information About Job Exists";
+        }
+        let assignment=new Assignment(req.body);
+        assignment=await assignment.save();
+        if(!assignment){
+            throw "Error In Creating The Assignment";
+        }
+        res.status(200).json({success:"Successfully Created The Assignment"})
+    }
+    catch(error){
+        res.status(501).json({error:error});
     }
 })
 module.exports=router;
