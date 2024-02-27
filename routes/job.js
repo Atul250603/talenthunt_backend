@@ -237,9 +237,16 @@ router.post('/unshortlist/:jobId/:id',fetchuser,async(req,res)=>{
             }
             shortlisted.splice(idx,1);
             let nonshortlisted=[...jobinfo.nonshortlisted,id];
-            jobinfo=await JobInfo.updateOne({jobId:jobId},{$set:{shortlisted,nonshortlisted}});
-            if(!jobinfo){
+            let updatejobinfo=await JobInfo.updateOne({jobId:jobId},{$set:{shortlisted,nonshortlisted}});
+            if(!updatejobinfo){
                 throw 'Error In Unshortlisting The Candidate';
+            }
+            
+            for(let i=0;i<jobinfo.assignments.length;i++){
+                let assignment=await Assignment.updateOne({_id:jobinfo.assignments[i].assignmentId},{$pull:{solutions:{userId:req.params.id}}});
+                if(!assignment){
+                    throw "Error In Unshortlisting The Candidate";
+                }
             }
             res.status(200).json({success:"Successfully Unshortlisted The Candidate"});
         }
@@ -316,7 +323,163 @@ router.post('/createassignment/:id',fetchuser,async(req,res)=>{
         if(!assignment){
             throw "Error In Creating The Assignment";
         }
+        assignment={assignmentId:String(assignment._id),assignmentname:assignment.assignmentname,date:assignment.assignmentdate,duration:assignment.assignmentduration}
+        const doc2=await JobInfo.updateOne({jobId:req.params.id},{$push:{assignments:assignment}});
+        if(!doc2){
+            throw "Error In Creating The Assignment"
+        }
         res.status(200).json({success:"Successfully Created The Assignment"})
+    }
+    catch(error){
+        res.status(501).json({error:error});
+    }
+})
+router.post('/applied',fetchuser,async(req,res)=>{
+    try{
+        let user=req.user;
+        let uid=user._id;
+        const userdoc=await User.findOne({_id:uid});
+        if(!userdoc){
+            throw "Error In Finding The User";
+        }
+        const jobinfo=await JobInfo.find({applied:{$in:[uid]}}).populate('jobId');
+        if(!jobinfo){
+            throw "You haven't Applied For Jobs";
+        }
+        res.status(200).json({success:"Successfully Listed Applied Jobs",jobs:jobinfo});
+    }
+    catch(error){
+        res.status(501).json({error:error});
+    }
+})
+router.post('/applied/:id',fetchuser,async(req,res)=>{
+    try{
+        let user=req.user;
+        let uid=user._id;
+        const userdoc=await User.findOne({_id:uid});
+        if(!userdoc){
+            throw "Error In Finding The User";
+        }
+        let jobinfo=await JobInfo.find({jobId:req.params.id,applied:{$in:[uid]}}).populate('jobId');
+        if(!jobinfo){
+            throw "You haven't Applied For Jobs";
+        }
+        let isshortlisted=0; //pending
+        let assignment=[];
+        let interview=[];
+        if(jobinfo[0].shortlisted && jobinfo[0].shortlisted.length>0 && jobinfo[0].shortlisted.indexOf(String(uid))!==-1){
+            isshortlisted=1;
+            assignment=jobinfo[0].assignments;
+            let interviewval=jobinfo[0].interviews.find((element)=>String(element.user)===String(uid))
+            if(interviewval){
+                interview.push(jobinfo[0].interviews);
+            }
+        }
+        else if(jobinfo[0].nonshortlisted && jobinfo[0].nonshortlisted.length>0 && jobinfo[0].nonshortlisted.indexOf(uid)!==-1){
+            isshortlisted=2;
+        }
+        res.json({success:"Successfully Listed The Job",job:{jobId:jobinfo[0].jobId,isshortlisted,assignment,interview}});
+    }
+    catch(error){
+        res.status(501).json({error:error});
+    }
+})
+router.post('/applied/:id/assignments/:id1',fetchuser,async(req,res)=>{
+    try{
+        let user=req.user;
+        let uid=user._id;
+        const userdoc=await User.findOne({_id:uid});
+        if(!userdoc){
+            throw "Error In Finding The User";
+        }
+        const jobinfo=await JobInfo.findOne({jobId:req.params.id,shortlisted:{$in:[uid]},assignments:{$elemMatch:{assignmentId:req.params.id1}}});
+        if(!jobinfo){
+            throw "You haven't Applied For Job";
+        }
+        const assignment=await Assignment.findOne({_id:req.params.id1});
+        if(!assignment){
+            throw "Error In Fetching The Assignment"
+        }
+        const encoded=btoa(JSON.stringify(assignment));
+        res.json({success:"Successfully Listed The Assignment",assignment:encoded})
+    }
+    catch(error){
+        res.status(501).json({error:error});
+    }
+})
+router.post('/applied/:id/assignments/:id1/submission',fetchuser,async(req,res)=>{
+    try{
+        let user=req.user;
+        let uid=user._id;
+        const userdoc=await User.findOne({_id:uid});
+        if(!userdoc){
+            throw "Error In Finding The User";
+        }
+        const jobinfo=await JobInfo.findOne({jobId:req.params.id,shortlisted:{$in:[uid]},assignments:{$elemMatch:{assignmentId:req.params.id1}}});
+        if(!jobinfo){
+            throw "You haven't Applied For Job";
+        }
+        let solution={...req.body,userId:uid};
+        const assignment=await Assignment.updateOne({_id:req.params.id1},{$push:{solutions:solution}});
+        if(!assignment){
+            throw "Error In Submitting The Assignment"
+        }
+        res.json({success:"Successfully Submitted The Assignment"})
+    }
+    catch(error){
+        res.status(501).json({error:error});
+    }
+})
+router.post('/:id/myassignments',fetchuser,async(req,res)=>{
+    try{
+        let user=req.user;
+        let uid=user._id;
+        const userdoc=await User.findOne({_id:uid});
+        if(!userdoc){
+            throw "Error In Finding The User";
+        }
+        const jobinfo=await Job.findOne({_id:req.params.id,userId:uid});
+        if(!jobinfo){
+            throw "You Haven't Created This Job";
+        }
+        const assignments=await JobInfo.findOne({jobId:req.params.id});
+        if(!assignments){
+            throw "Error In Fetching The Assignments";
+        }
+        res.json({success:"Successfully Fetched The Assignments",assignments:assignments.assignments});
+    }
+    catch(error){
+        res.status(501).json({error:error});
+    }
+})
+router.post('/:id/myassignments/:id1',fetchuser,async(req,res)=>{
+    try{
+        let user=req.user;
+        let uid=user._id;
+        const userdoc=await User.findOne({_id:uid});
+        if(!userdoc){
+            throw "Error In Finding The User";
+        }
+        const job=await Job.findOne({_id:req.params.id,userId:uid});
+        if(!job){
+            throw "You Haven't Created This Job";
+        }
+        const jobinfo=await JobInfo.findOne({jobId:req.params.id,assignments:{$elemMatch:{assignmentId:req.params.id1}}})
+        if(!jobinfo){
+            throw "No Such Assignment Exists";
+        }
+        let assignments=await Assignment.findOne({_id:req.params.id1});
+        if(!assignments){
+            throw "Error In Fetching The Assignments";
+        }
+        for(let i=0;i<assignments.solutions.length;i++){
+            let userinfo=await UserInfo.findOne({userId:assignments.solutions[i].userId});
+            if(!userinfo){
+                throw "Error In Fetching The User Information";
+            }
+            assignments.solutions[i].userId={userId:userinfo.userId,fname:userinfo.fname,lname:userinfo.lname,profileImg:userinfo.profileImg};
+        }
+        res.json({success:"Successfully Fetched The Assignments",assignments:assignments});
     }
     catch(error){
         res.status(501).json({error:error});
