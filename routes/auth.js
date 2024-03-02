@@ -69,7 +69,7 @@ router.post('/login',async(req,res)=>{
             if(!token){
                 throw 'Error In Loggig In';
             }
-            res.status(200).json({success:"Login Successful",token:token,user:{email:data.email,type:data.type,profileCompleted:data.profileCompleted}});
+            res.status(200).json({success:"Login Successful",token:token,user:{_id:data._id,email:data.email,type:data.type,profileCompleted:data.profileCompleted}});
     }
     catch(error){
         res.status(500).json({error:error});

@@ -150,12 +150,28 @@ router.post('/allprojects',fetchuser,async(req,res)=>{
         }
         else{
             for(let i=0;i<projects.length;i++){
+                let idx5=-1;
+                if(projects[i].sameOrg){
+                    let orgofcreator=await UserInfo.findOne({userId:projects[i].userId});
+                    let orgofapplicant=await UserInfo.findOne({userId:uid});
+                    if(orgofcreator && orgofapplicant && (orgofapplicant.currorg!==orgofcreator.currorg)){
+                        idx5=i;
+                    }
+                    else if(!orgofcreator || !orgofapplicant){
+                        throw "Error In Finding The Project";
+                    }
+                }
+                if(idx5>=0){
+                    projects.splice(i,1);
+                    i--;
+                }
                 let project=await ProjectInfo.findOne({projectId:projects[i]._id});
                 if(project){
                     let idx1=project.accepted.indexOf(uid);
                     let idx2=project.rejected.indexOf(uid);
                     let idx3=project.pending.indexOf(uid);
                     let idx4=project.rejectedByCreator.indexOf(uid);
+                    
                     if(idx1>=0 || idx2>=0 || idx3>=0 || idx4>=0){
                         projects.splice(i,1);
                         i--;
@@ -317,16 +333,16 @@ router.post('/getprofile/:id/p/:projid',fetchuser,async(req,res)=>{
         }
         let project=await Project.findOne({_id:req.params.projid,userId:uid});
         if(!project){
-            // project=await Project.findOne({_id:req.params.projid});
-            // if(project){
-            //     let projectinfo=await ProjectInfo.findOne({projectId:project._id,accepted:{$in:[uid]}});
-            //     if(!projectinfo){
-            //         throw "Error In Finding The Project";
-            //     }
-            // }
-            // else{
+            project=await Project.findOne({_id:req.params.projid});
+            if(project){
+                let projectinfo=await ProjectInfo.findOne({projectId:project._id,accepted:{$in:[uid]}});
+                if(!projectinfo){
+                    throw "Error In Finding The Project";
+                }
+            }
+            else{
                 throw "Error In Finding The Project";
-            // }
+            }
         }
         const info=await UserInfo.findOne({userId:req.params.id});
         res.status(200).json({success:"Displaying The Profile Information",user_info:info});

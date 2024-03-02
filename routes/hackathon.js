@@ -43,7 +43,7 @@ router.post('/gethackathon',fetchuser,async(req,res)=>{
             res.status(200).json({success:"Successfully Listed The Hackathons",hackathons:resp});
         }
         else{
-            throw "Error In Listing The Hackathons";
+            throw "No Hackathons Created Yet";
         }
     }
     catch(error){
@@ -203,10 +203,19 @@ router.post('/myhackathon/:id',fetchuser,async(req,res)=>{
         if(!userdoc){
             throw "Error In Finding The User";
         }
+        const hackathon=await Hackathon.findOne({_id:req.params.id});
+        if(!hackathon){
+            throw "Error In Finding The Hackathon";
+        }
+
         const hackinfo=await HackInfo.findOne({hackathonId:req.params.id}).populate('hackathonId');
         if(!hackinfo){
-            throw "No One Has Applied To The Hackathon Yet";
+            if(String(hackathon.userId)!==String(uid)){
+                throw "You Are Not The Creator Of This Hackathon";
+            }
+            res.status(200).json({success:"Successfully Listed The Hackathon",hackathon:{hackathonId:hackathon}});
         }
+        else{
         if(String(hackinfo.hackathonId.userId)!==String(uid)){
             throw "You Are Not The Creator Of This Hackathon";
         }
@@ -222,6 +231,7 @@ router.post('/myhackathon/:id',fetchuser,async(req,res)=>{
             })
         }
         res.status(200).json({success:"Successfully Listed The Hackathon",hackathon:{...hackinfo._doc,submissions:submissions}});
+        }
     }
     catch(error){
         res.status(501).json({error:error});

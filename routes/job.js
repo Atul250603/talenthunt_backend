@@ -98,10 +98,19 @@ router.post('/myjob/:id',fetchuser,async(req,res)=>{
         if(!userdoc){
             throw "Error In Finding The User";
         }
+        const job=await Job.findOne({_id:req.params.id});
+        if(!job){
+            throw "Error In Finding The Job";
+        }
         const jobinfo=await JobInfo.findOne({jobId:req.params.id}).populate('jobId');
         if(!jobinfo){
-            throw "No One Has Applied To The Job Yet";
+            
+            if(String(job.userId)!==String(uid)){
+                throw "You Are Not The Creator Of This Job";
+            }
+            res.status(200).json({success:"Successfully Listed The Job",job:{jobId:job}});
         }
+        else{
         if(String(jobinfo.jobId.userId)!==String(uid)){
             throw "You Are Not The Creator Of This Job";
         }
@@ -128,7 +137,7 @@ router.post('/myjob/:id',fetchuser,async(req,res)=>{
             })
         }
         for(let i=0;i<jobinfo.nonshortlisted.length;i++){
-            let userinfo=await UserInfo.findOne({userId:applied[i]});
+            let userinfo=await UserInfo.findOne({userId:jobinfo.nonshortlisted[i]});
             if(!userinfo){
                 throw "Error In Finding The Participant";
             }
@@ -138,6 +147,7 @@ router.post('/myjob/:id',fetchuser,async(req,res)=>{
         }
         
         res.status(200).json({success:"Successfully Listed The Job",job:{...jobinfo._doc,nonshortlisted,shortlisted,pending}});
+    }
     }
     catch(error){
         res.status(501).json({error:error});
