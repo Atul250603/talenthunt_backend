@@ -65,7 +65,14 @@ router.post('/getallhackathons',fetchuser,async(req,res)=>{
         }
         const hackathons=[];
         for(let i=0;i<hackathon.length;i++){
-             if(hackathon[i].regStartDate.toLocaleDateString()===currDate.toLocaleDateString() && hackathon[i].regEndDate.toLocaleDateString()>currDate.toLocaleDateString()){
+             if(hackathon[i].regStartDate.getTime()<=currDate.getTime() && hackathon[i].regEndDate.getTime()>currDate.getTime()){
+                    if(hackathon[i].sameOrg){
+                        const orgofapplicant=await UserInfo.findOne({userId:uid});
+                        const orgoforganiser=await UserInfo.findOne({userId:hackathon[i].userId});
+                        if(orgofapplicant.currorg!=orgoforganiser.currorg){
+                            continue;
+                        }
+                    }
                  const hackathoninfo=await HackInfo.findOne({hackathonId:hackathon[i]._id,applied:{$in:[uid]}});
                  if(!hackathoninfo){
                      hackathons.push(hackathon[i]);
