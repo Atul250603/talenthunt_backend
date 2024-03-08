@@ -168,7 +168,7 @@ router.post('/getalljobs',fetchuser,async(req,res)=>{
         }
         const jobs=[];
         for(let i=0;i<job.length;i++){
-             if(job[i].appdeadline.toLocaleDateString()>=currDate.toLocaleDateString()){
+             if(job[i].appdeadline.getTime()>=currDate.getTime()){
                  const jobinfo=await JobInfo.findOne({jobId:job[i]._id,applied:{$in:[uid]}});
                  if(!jobinfo){
                      jobs.push(job[i]);
