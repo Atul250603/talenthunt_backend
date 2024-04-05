@@ -54,7 +54,7 @@ io.on('connection',(socket)=>{
        onlineUsers.delete(id);
        sockettopeer.delete(myid);
        sockettoroom.delete(myid);
-       io.in(room).emit("user-disconnected",{id:myid,peerId:id});
+       socket.to(room).emit("user-disconnected",{id:myid,peerId:id});
     })
     socket.on("sendmsg",(data)=>{
         const sendusersocket=onlineUsers.get(data.to);
