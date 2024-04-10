@@ -7,6 +7,7 @@ const Job=require('../modals/Jobs.js');
 const fetchuser=require('../middleware');
 const Questions=require('../modals/Question.js');
 const Assignment=require('../modals/Assignment.js');
+const jobRecommendation = require('../jobRecommendation.js');
 router.post('/createjob',fetchuser,async(req,res)=>{
     try{
         let data=req.body;
@@ -161,6 +162,10 @@ router.post('/getalljobs',fetchuser,async(req,res)=>{
         if(!userdoc){
             throw "Error In Finding The User";
         }
+        const userinfo=await UserInfo.findOne({userId:uid});
+        if(!userinfo){
+            throw "Error In Finding The User";
+        }
         const currDate=new Date();
         const job=await Job.find({});
         if(!job){
@@ -174,8 +179,9 @@ router.post('/getalljobs',fetchuser,async(req,res)=>{
                      jobs.push(job[i]);
                     }
                 }
-            };
-        res.status(200).json({success:"Successfully Listed All The Jobs",jobs:jobs});
+        };
+        const recommendedjobs=await jobRecommendation(jobs,userinfo);
+        res.status(200).json({success:"Successfully Listed All The Jobs",jobs:recommendedjobs});
     }
     catch(error){
         res.status(501).json({error:error});

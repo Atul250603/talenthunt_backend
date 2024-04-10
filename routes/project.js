@@ -10,6 +10,7 @@ const secret=process.env.SECRET;
 const fetchuser=require('../middleware');
 const { Model } = require('mongoose');
 const ProjectInfo = require('../modals/ProjectInfo.js');
+const recommendProjects = require('../projectRecommendation.js');
 router.post('/postproject',fetchuser,async(req,res)=>{
     try{ 
         let data=req.body;
@@ -144,6 +145,10 @@ router.post('/allprojects',fetchuser,async(req,res)=>{
         if(!userdoc){
             throw "Error In Finding The User";
         }
+        const userinfo=await UserInfo.findOne({userId:uid});
+        if(!userinfo){
+            throw "Error In Finding The User";
+        }
         let projects=await Project.find({userId:{$ne:uid}});
         if(!projects){
             throw "Error In Finding The Project";
@@ -179,7 +184,11 @@ router.post('/allprojects',fetchuser,async(req,res)=>{
                 }
             }
         }
-        res.status(200).json({success:"Successfully Listing All The Projects",projects});
+        let recommendations;
+        if(projects.length>0){
+           recommendations=recommendProjects(projects,userinfo);
+        }
+        res.status(200).json({success:"Successfully Listing All The Projects",projects:recommendations});
     }
     catch(error){
         res.status(501).json({error:error});
