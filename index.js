@@ -6,8 +6,8 @@ const cors=require('cors');
 const socket=require('socket.io');
 const readAndImportJSON=require('./loadquestionscript.js');
 const port=process.env.PORT||5000;
-const { PeerServer } = require("peer");
-const peerServer = PeerServer({ port: 9000, path: "/myapp" ,cors:{origin:'*'}});
+const {ExpressPeerServer } = require("peer");
+
 app.use(express.json());
 app.use(cors());
 connectToMongo();
@@ -21,6 +21,7 @@ app.use('/message',require('./routes/message.js'));
 const server=app.listen(port,()=>{
     console.log(`Server is running on port ${port}`);
 })
+const peerServer = ExpressPeerServer(server,{path:"/myapp"});
 const io=socket(server,{
     cors:{
         origin:'*',
