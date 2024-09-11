@@ -21,7 +21,7 @@ app.use('/message',require('./routes/message.js'));
 const server=app.listen(port,()=>{
     console.log(`Server is running on port ${port}`);
 })
-const peerServer = ExpressPeerServer(server,{path:"/myapp"});
+app.use('/myapp',ExpressPeerServer(server,{debug:true})); 
 const io=socket(server,{
     cors:{
         origin:'*',
