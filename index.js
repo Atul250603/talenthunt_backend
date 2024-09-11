@@ -7,7 +7,7 @@ const socket=require('socket.io');
 const readAndImportJSON=require('./loadquestionscript.js');
 const port=process.env.PORT||5000;
 const { PeerServer } = require("peer");
-const peerServer = PeerServer({ port: 9000, path: "/myapp" });
+const peerServer = PeerServer({ port: 9000, path: "/myapp" ,cors:{origin:'*'}});
 app.use(express.json());
 app.use(cors());
 connectToMongo();
