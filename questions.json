@@ -1,5 +1,5 @@
-{
-  "mcqs": [
+
+   [
     {
       "question": "Which word does not belong to the group?",
       "options": ["Circle", "Square", "Triangle", "Oval"],
@@ -176,4 +176,4 @@
       "correct_answer": "◆"
     }
   ]
-}
+

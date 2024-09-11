@@ -23,7 +23,7 @@ const server=app.listen(port,()=>{
 })
 const io=socket(server,{
     cors:{
-        origin:'http://localhost:3000',
+        origin:'*',
         credentials:true
     }
 })
